@@ -4,7 +4,6 @@
   "description": "Small Google Chrome extension which fixes corrupted Shared Wido",
   "manifest_version": 2,
   "permissions": [
-    "bookmarks",
     "activeTab"
   ],
   // "background": {
