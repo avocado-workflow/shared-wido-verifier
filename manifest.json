@@ -1,20 +1,27 @@
 {
-  "name": "Shared Wido Fixer",
-  "version": "1.0",
-  "description": "Small Google Chrome extension which fixes corrupted Shared Wido",
-  "manifest_version": 2,
-  "permissions": [
-    "activeTab"
-  ],
-  // "background": {
-  //   "scripts": ["background.js"],
-  //   "persistent": false
-  // ,
-  "browser_action": {
-      "default_title": "Fix Shared Wido",
-      "default_icon": "icon.png",
-      "default_popup": "popup.html"
-  },
-  "web_accessible_resources": ["c2.js"], // to make it available for injection on the page
-  "content_security_policy": "script-src 'self' https://ajax.googleapis.com; object-src 'self'"
+    "name": "Shared Wido Fixer",
+    "version": "1.0",
+    "description": "Small Google Chrome extension which fixes corrupted Shared Wido",
+    "manifest_version": 2,
+    "permissions": [
+        "activeTab"
+    ],
+    // "background": {
+    //   "scripts": ["background.js"],
+    //   "persistent": false
+    // ,
+
+    "icons":
+    {
+        "48": "icon48.png"
+    },
+
+    "browser_action":
+    {
+        "default_title": "Fix Shared Wido",
+        "default_icon": "icon.png",
+        "default_popup": "popup.html"
+    },
+    "web_accessible_resources": ["c2.js"], // to make it available for injection on the page
+    "content_security_policy": "script-src 'self' https://ajax.googleapis.com; object-src 'self'"
 }
