@@ -20,8 +20,7 @@ console.log("Script to fix wido is injected. Let's do our magic now...");
             return res.text().then(function(text) {
                 console.log("Fixing results: ");
                 console.log(text);
-                myArticle.innerHTML = text;
             });
-            .catch(function(res) { console.log(res) });
-        }());
-});
+        })
+        .catch(function(res) { console.log(res) });
+})();
