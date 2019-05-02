@@ -2,6 +2,8 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log("Extension popup is displayed and loaded...");
     document.querySelector('#fixWido')
         .addEventListener('click', function() {executeOnPage('fixWido')});
+     document.querySelector('#generateMinutesReport')
+        .addEventListener('click', function() {executeOnPage('generateMinutesReport')});
     document.querySelector('#deleteMeeting')
         .addEventListener('click', function() {deleteMeeting()});
 });

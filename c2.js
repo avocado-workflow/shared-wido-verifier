@@ -11,10 +11,42 @@ console.log("Admin Widget Script is injected. Let's see what we can do here...")
         case 'delete' :
             deleteProcessInstance();
             break;
+        case 'generateMinutesReport':
+            generateMinutesReport();
+            break;
         default: 
-            console.log("No command received. Exiting...");
+            console.log("No command recognized: '"+ command +"'. Exiting...");
     }
 })();
+
+function generateMinutesReport() {
+    var task = document.querySelector('dynamic-task-view') || document.querySelector('history-task-view');
+
+    var piKey = task.ProcessInstance._Key;
+    var token = localStorage.getItem('accessToken');
+    //var baseUrl = document.querySelector('avocado-frame').appMeta.byKey('host');
+    var baseUrl = 'https://1-dot-ao2prod-backend.appspot.com/v1'
+    console.log("ProcessInstance Key:", piKey);
+
+    var requestBody = []
+    fetch(baseUrl + "/admin-toolbox/process-instance/" + piKey + "/reports", {
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+            },
+            method: "POST",
+            body: "code=MINUTES_REPORT_DOC"
+        })
+        .then(function(res) {
+            return res.text().then(function(text) {
+                console.log("Results: ");
+                console.log(text);
+                alert("Report generation completed. Please refresh your page.");
+            });
+        })
+        .catch(function(res) { console.log(res) });
+    return;
+}
 
 function fixWido() {
     console.log("Fixing WIDO... ")
