@@ -76,7 +76,7 @@ function fixWido() {
 function deleteProcessInstance() {
     console.log("deleting process instance... ");
 
-    var task = document.querySelector('dynamic-task-view');
+    var task = document.querySelector('dynamic-task-view') || document.querySelector('history-task-view');
     var piKey = task.ProcessInstance._Key;
     var token = localStorage.getItem('accessToken');
     var baseUrl = 'https://1-dot-ao2prod-backend.appspot.com/v1'
