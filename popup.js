@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', function() {
         .addEventListener('click', function() {executeOnPage('generateMinutesReport')});
     document.querySelector('#deleteMeeting')
         .addEventListener('click', function() {deleteMeeting()});
+    document.querySelector('#showPublishedItemMgmtControls')
+        .addEventListener('click', function() {executeOnPage('showPublishedItemMgmtControls')});
 });
 
 function deleteMeeting() {
