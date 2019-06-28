@@ -24,6 +24,12 @@ console.log("Admin Widget Script is injected. Let's see what we can do here...")
 
 function showPublishedItemMgmtControls() {
     var itemPopups = document.querySelectorAll("awi-agenda-item-popup");
+
+    if(!itemPopups || !itemPopups.length) {
+        console.log("NO attachments grid found. Is Published Item popup opened up?");
+        return;
+    }
+
     var itemPopup = itemPopups[itemPopups.length - 1];
     
     var goToFirebaseBtn =document.createElement("button");
@@ -36,45 +42,41 @@ function showPublishedItemMgmtControls() {
     });
     
     itemPopup.querySelector('iron-icon[id=paperClipIcon]').parentNode.append(goToFirebaseBtn);
-    
-    var attachmentsGrids = document.querySelectorAll("awi-grid[label=Attachments]");
 
-    if(!attachmentsGrids) {
-        console.log("NO attachments grid found. Is Published Item popup opened up?");
-        return;
-    }
-    var attachmentsGrid = attachmentsGrids[attachmentsGrids.length - 1];
-    var rows = attachmentsGrid.querySelectorAll("awi-grid-row");
+    var attachmentsGrid = itemPopup.querySelector("awi-grid[label=Attachments]");
+    if (attachmentsGrid) {
+        var rows = attachmentsGrid.querySelectorAll("awi-grid-row");
 
-    rows.forEach(function(row) {
-        var btn = document.createElement("button");
-        btn.innerHTML = "x";
-        btn.addEventListener ("click", function() {
-            var fileId = row.item.AttachmentDoc.UploadedFileId;
+        rows.forEach(function(row) {
+            var btn = document.createElement("button");
+            btn.innerHTML = "x";
+            btn.addEventListener ("click", function() {
+                var fileId = row.item.AttachmentDoc.UploadedFileId;
 
-            var form = document.querySelector('dynamic-task-view');
-            var piKey = form.ProcessInstance._Key;
-            var token = localStorage.getItem('accessToken');
-            var itemKey = itemPopup.firebasePath.split("/_INTERNAL_ITEMS/")[1];
+                var form = document.querySelector('dynamic-task-view');
+                var piKey = form.ProcessInstance._Key;
+                var token = localStorage.getItem('accessToken');
+                var itemKey = itemPopup.firebasePath.split("/_INTERNAL_ITEMS/")[1];
+                    
+                var baseUrl = document.querySelector('avocado-frame').appMeta.byKey('host');
                 
-            var baseUrl = document.querySelector('avocado-frame').appMeta.byKey('host');
-            
-            fetch(baseUrl + "v1/admin-toolbox/meeting-mgmt/" + piKey + /item/ + itemKey + "/attachments/" + fileId, {
-                headers: {
-                    'Authorization': 'Bearer ' + token
-                },
-                method: "DELETE"
-            })
-            .then(function(res) {
-                return res.text().then(function(text) {
-                    console.log("Results: ");
-                    console.log(text);
-                });
-            })
-            .catch(function(res) { console.log(res) });
+                fetch(baseUrl + "v1/admin-toolbox/meeting-mgmt/" + piKey + /item/ + itemKey + "/attachments/" + fileId, {
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    },
+                    method: "DELETE"
+                })
+                .then(function(res) {
+                    return res.text().then(function(text) {
+                        console.log("Results: ");
+                        console.log(text);
+                    });
+                })
+                .catch(function(res) { console.log(res) });
+            });
+            row.querySelectorAll("awi-grid-cell")[1].append(btn);
         });
-        row.querySelectorAll("awi-grid-cell")[1].append(btn);
-    });
+    }
 
     var newAttachmentName = document.createElement('input');
     newAttachmentName.type = "text";
@@ -92,7 +94,7 @@ function showPublishedItemMgmtControls() {
         var itemKey = itemPopup.firebasePath.split("/_INTERNAL_ITEMS/")[1];
             
         var baseUrl = document.querySelector('avocado-frame').appMeta.byKey('host');
-        
+
         var file = newAttachmentInput.files[0];
         console.log("about to upload file: " + file);
 
@@ -115,9 +117,11 @@ function showPublishedItemMgmtControls() {
           );
     });
     
-    attachmentsGrid.parentNode.insertBefore(addNewAttachmentBtn, attachmentsGrid.nextSibling);
-    attachmentsGrid.parentNode.insertBefore(newAttachmentInput, addNewAttachmentBtn);
-    attachmentsGrid.parentNode.insertBefore(newAttachmentName, newAttachmentInput);
+    var recommendedMotionEditor = itemPopup.querySelector("awi-editor[label='Recommended Motion']");
+
+    recommendedMotionEditor.parentNode.insertBefore(addNewAttachmentBtn, recommendedMotionEditor);
+    recommendedMotionEditor.parentNode.insertBefore(newAttachmentInput, addNewAttachmentBtn);
+    recommendedMotionEditor.parentNode.insertBefore(newAttachmentName, newAttachmentInput);
 }
 
 function generateMinutesReport() {
@@ -156,7 +160,7 @@ function fixWido() {
     var piKey = task.ProcessInstance._Key;
     var token = localStorage.getItem('accessToken');
     //var baseUrl = document.querySelector('avocado-frame').appMeta.byKey('host');
-    var baseUrl = 'https://1-dot-ao2prod-backend.appspot.com/v1'
+    var baseUrl = 'https://dev-dot-ao2prod-backend.appspot.com/v1'
 
     fetch(baseUrl + "/admin-toolbox/rebuild-shared-wido/" + piKey, {
             headers: {
